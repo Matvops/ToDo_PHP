@@ -28,11 +28,11 @@ class AuthService {
                     'data' => null
                 ];
             }
-
+            
             return [
                 'status' => true,
                 'msg' => 'Login realizado',
-                'data' => $user
+                'data' => $user->id
             ];
         } catch(Exception $e) {
             error_log($e->getMessage());
