@@ -41,11 +41,7 @@ class MainService {
         try{
             DB::beginTransaction(); 
 
-            error_log($task['week_id']);
-
             $task['week_id'] = Crypt::decrypt($task['week_id']);
-            
-            error_log($task['week_id']);
 
             $newTask = new Task();
             $newTask->title = $task['title'];
