@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuthService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -10,9 +11,9 @@ class AuthController extends Controller
 {
     private AuthService $service;
 
-    function __construct()
+    public function __construct()
     {
-        $service = new AuthService;
+        $this->service = new AuthService;
     }
 
     public function login(): View
@@ -20,7 +21,7 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function authLogin(Request $request): void
+    public function authLogin(Request $request): RedirectResponse
     {
         $request->validate(
             [
@@ -38,10 +39,27 @@ class AuthController extends Controller
         );
 
         $dadosLogin = [
-            "username" => $request->input('uesrname'),
-            "password" => $request->input('password'),
+            "username" => $request->input('username'),
+            "password" => $request->input('password')
         ];
 
         $result = $this->service->auth($dadosLogin);
+        
+        if(!$result['status']) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('authFailed', $result['msg']);
+        }
+
+        session(
+            [
+                'user' => [
+                    'user_id' => $result['data']
+                ] 
+            ]
+        );
+
+        return redirect()->route('home');
     }
 }
