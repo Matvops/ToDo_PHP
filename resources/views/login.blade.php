@@ -64,7 +64,7 @@
                     </svg>
                     <span class="sr-only">Error icon</span>
                 </div>
-                <div class="ms-3 text-sm font-normal">session('authFailed')</div>
+                <div class="ms-3 text-sm font-normal">{{ session('authFailed') }}</div>
             </div>
         @endif
     </x-slot:content>

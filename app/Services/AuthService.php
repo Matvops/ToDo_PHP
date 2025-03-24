@@ -12,7 +12,6 @@ class AuthService {
     {
         try {
             $user = User::where('username', $dados['username'])->first();
-            error_log(json_encode($user));
             if(!$user) {
                 return [
                     'status' => false,
