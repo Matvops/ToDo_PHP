@@ -52,10 +52,14 @@ class AuthController extends Controller
                 ->with('authFailed', $result['msg']);
         }
 
-        return redirect()->route('home');
-    }
+        session(
+            [
+                'user' => [
+                    'user_id' => $result['data']
+                ] 
+            ]
+        );
 
-    public function home() {
-        echo "oi";
+        return redirect()->route('home');
     }
 }
