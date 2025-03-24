@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Models\Task;
 use App\Models\Week;
+use Exception;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class MainService {
 
@@ -32,6 +35,41 @@ class MainService {
             'data' => $tasksAndWeeks
         ];
 
+    }
+
+    public function createTaskSubmit(array $task){
+        try{
+            DB::beginTransaction(); 
+
+            error_log($task['week_id']);
+
+            $task['week_id'] = Crypt::decrypt($task['week_id']);
+            
+            error_log($task['week_id']);
+
+            $newTask = new Task();
+            $newTask->title = $task['title'];
+            $newTask->priority = $task['priority'];
+            $newTask->week_id = $task['week_id'];
+            $newTask->user_id = session('user.user_id');
+            $newTask->save();
+            DB::commit(); 
+            return [
+                'status' => true,
+                'msg' => "Tarefa criada com sucesso!",
+            ];
+
+        } catch (Exception $e) {
+            DB::rollBack(); 
+            return [
+                'status' => false,
+                'msg' => "Falha ao criar nova tarefa!",
+            ];
+        }
+    }
+
+    public function updateTask($task_id){
+        
     }
 
     private function getTasks(): array
