@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+
+    public $fillable = [
+        'title',
+        'priority'
+    ];
+    
     public function users(){
         return $this->belongsTo(User::class);
     }
