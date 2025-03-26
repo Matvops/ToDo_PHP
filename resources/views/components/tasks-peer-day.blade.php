@@ -32,7 +32,7 @@
                     
                         {{$task['title']}}
                         <div class="flex gap-2">
-                            <a href="{{ route('update.task', 
+                            <a href="{{route('update.task',
                                 [
                                     'task_id' => Crypt::encrypt($task['id'])
                                 ]

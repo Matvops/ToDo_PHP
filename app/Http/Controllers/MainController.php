@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\MainService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class MainController extends Controller
@@ -19,10 +21,8 @@ class MainController extends Controller
     public function home(): View
     {
         $tasksAndWeeks = $this->service->getTasksAndWeeks();
-
-        if(!$tasksAndWeeks['status']){
-            echo "Deu ruim";
-        }
+        
+        error_log(json_encode($tasksAndWeeks));
         return view('home', 
             [
                 'weeks' => $tasksAndWeeks['data']['weeks'],
@@ -33,11 +33,11 @@ class MainController extends Controller
 
     public function createTask($week_id): View
     {
-       
         return view('createTask', ['week_id' => $week_id]);
     }
 
-    public function createTaskSubmit(Request $request) {
+    public function createTaskSubmit(Request $request)
+     {
         $request->validate(
             [
                 'title' => 'required|min:6',
@@ -58,20 +58,64 @@ class MainController extends Controller
             'week_id' => $request->input('week_id')
         ];
 
-        $result = $this->service->createTaskSubmit($newTask);
+        $createTaskResponse = $this->service->createTaskSubmit($newTask);
+        
 
-        if(!$result['status']) {
+        if(!$createTaskResponse['status']) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with("createTaskFailed", $result['msg']);
+                ->with("createTaskFailed", $createTaskResponse['message']);
         }
 
         return redirect()->route('home');
     }
 
     public function updateTask($task_id)
+    {   
+        $task = $this->service->updateTask($task_id);
+
+        if(!$task['status']) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('updateTaskFailed', $task['message']);
+        }
+
+        return view('updateTask', ['task' => $task['data']]);
+    }
+
+    public function updateTaskSubmit(Request $request): RedirectResponse
     {
-        $this->service->updateTask($task_id);
+        $request->validate(
+            [
+                'title' => 'required|min:6',
+                'priority' => 'required',
+                'task_id' => 'required'
+            ],
+            [
+                'title.required' => "Titulo da tarefa obrigatório",
+                'title.min' => "O número minímo de caracteres é :min",
+                'priority.required' => "Selecione uma prioridade",
+                'task_id.required' => "Tarefa obrigatória"
+            ]
+        );
+
+        $task = [
+            'id' => $request->input('task_id'),
+            'title' => $request->input('title'),
+            'priority' => $request->input('priority')  
+        ];
+
+        $updateTaskResponse = $this->service->updateTaskSubmit($task);
+
+        if(!$updateTaskResponse['status']) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('updateTaskFailed', $updateTaskResponse['message']);
+        }
+
+        return redirect()->route('home');
     }
 }
