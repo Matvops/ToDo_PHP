@@ -22,7 +22,6 @@ class MainController extends Controller
     {
         $tasksAndWeeks = $this->service->getTasksAndWeeks();
         
-        error_log(json_encode($tasksAndWeeks));
         return view('home', 
             [
                 'weeks' => $tasksAndWeeks['data']['weeks'],
