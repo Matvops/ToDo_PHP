@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\MainService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class MainController extends Controller
@@ -116,5 +114,19 @@ class MainController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    public function deleteSubmit($task_id){
+        $deleteTaskRespose = $this->service->deleteSubmit($task_id);
+
+        if(!$deleteTaskRespose['status']) {
+            return redirect()
+                ->back()
+                ->with('deleteTaskFailed', $deleteTaskRespose['message']);
+        }
+
+        return redirect()
+        ->back()
+        ->with('deleteTaskSuccess', $deleteTaskRespose['message']);
     }
 }
