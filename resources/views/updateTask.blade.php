@@ -2,6 +2,8 @@
     <x-slot:title>Update Task</x-slot:title:>
 
     <x-slot:content>
+    <x-logout-button />
+
     <div class="min-w-[400px] w-3/10 bg-zinc-600 tracking-wide rounded-sm max-h-[50vh] h-[500px] min-h-[400px] shadow-xl">
             <form action="{{ route('update.task.submit') }}" method="post" class="w-9/10 h-full mx-auto flex flex-col justify-between gap-8">
                 @csrf
