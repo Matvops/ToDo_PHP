@@ -48,5 +48,7 @@
                 <div class="ms-3 text-sm font-normal">{{ session('deleteTaskSuccess') }}</div>
             </div>
             @endif
+
+            <x-financas />
             </x-slot>
 </x-layouts.main-layout>
