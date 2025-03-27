@@ -99,7 +99,6 @@ class MainService {
 
     private function getTasks(): array
     {
-
         $tasks = Task::where('user_id', session('user.user_id'))
             ->orderByRaw('priority ASC')
             ->with('weeks')

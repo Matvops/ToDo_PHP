@@ -2,6 +2,8 @@
     <x-slot:title>Home</x-slot>
 
     <x-slot:content>
+        <x-logout-button />
+       
         <main class="w-5/10 self-start mt-[8%]">
             <h1 class="text-white font-extrabold text-3xl text-center mb-[8rem]">Lista de tarefas - <span class="text-red-700 uppercase">semanal</span></h1>
             <section>
