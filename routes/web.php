@@ -15,3 +15,5 @@ Route::post('/updateTaskSubmit', [MainController::class, 'updateTaskSubmit'])->n
 
 Route::get('/createTask/{week_id}', [MainController::class, 'createTask'])->name('add.task');
 Route::post('/createTaskSubmit', [MainController::class, 'createTaskSubmit'])->name('add.task.submit');
+
+Route::get('/delete/{task_id}', [MainController::class, 'deleteSubmit'])->name('delete.task');

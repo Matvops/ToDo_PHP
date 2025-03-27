@@ -52,7 +52,7 @@ class MainService {
         }
     }
 
-    public function updateTask($task_id){
+    public function updateTask(string $task_id){
         try {
             
             $task = $this->getTaskByIdEncrypted($task_id);
@@ -88,6 +88,22 @@ class MainService {
                 return $this->createResponse(false, 'Não foi possível atualizar esta tarefa!');
             }
             return $this->createResponse(true, 'Tarefa atualizada com sucesso!');
+        } catch (DecryptException $e) {
+            error_log($e->getMessage());
+            return $this->createResponse(false, $e->getMessage());
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return $this->createResponse(false, 'Erro inesparado. Favor relatar ao suporte!');
+        }  
+    }
+
+    public function deleteSubmit(string $task_id): array
+    {
+        try {
+            $task = $this->getTaskByIdEncrypted($task_id);
+            $task->forceDelete();
+
+            return $this->createResponse(true, "Task excluida com sucesso!");
         } catch (DecryptException $e) {
             error_log($e->getMessage());
             return $this->createResponse(false, $e->getMessage());
