@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Week;
 use Exception;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -111,6 +112,23 @@ class MainService {
             error_log($e->getMessage());
             return $this->createResponse(false, 'Erro inesparado. Favor relatar ao suporte!');
         }  
+    }
+
+    public function getMonthlySalary(){
+        try {
+            $salary = User::where('id', session('user.user_id'))
+                        ->select('salary')
+                        ->first();
+
+            if(!$salary) {
+                return $this->createResponse(false, 'Seu salário não foi cadastrado!');
+            }
+
+            return $this->createResponse(true, "Salario encontrado com sucesso!", $salary['salary']);
+        } catch(Exception $e) {
+            error_log($e->getMessage());
+            return $this->createResponse(false, 'Erro inesparado. Favor relatar ao suporte!');
+        }
     }
 
     private function getTasks(): array
