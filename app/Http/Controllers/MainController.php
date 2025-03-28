@@ -129,4 +129,17 @@ class MainController extends Controller
         ->back()
         ->with('deleteTaskSuccess', $deleteTaskRespose['message']);
     }
+
+    public function getMonthlySalary()
+    {
+        $getSalaryResponse = $this->service->getMonthlySalary();
+
+        if(!$getSalaryResponse['status']) {
+            return redirect()
+                ->back()
+                ->with('getSalaryFailed', $getSalaryResponse['message']);
+        }
+
+        return view('financas', ['salary' => $getSalaryResponse['data']]);
+    }
 }
