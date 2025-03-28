@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\View\Components\financas;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -17,3 +18,5 @@ Route::get('/createTask/{week_id}', [MainController::class, 'createTask'])->name
 Route::post('/createTaskSubmit', [MainController::class, 'createTaskSubmit'])->name('add.task.submit');
 
 Route::get('/delete/{task_id}', [MainController::class, 'deleteSubmit'])->name('delete.task');
+
+Route::get('/financas', [MainController::class, 'getMonthlySalary'])->name('financas');
